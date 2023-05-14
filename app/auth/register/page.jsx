@@ -1,6 +1,8 @@
 "use client";
 
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 const UserLogin = () => {
   const router = useRouter();
@@ -34,6 +36,8 @@ const UserLogin = () => {
               Nombre de usuario
             </label>
             <input
+              type="text"
+              label="username"
               id="username"
               name="username"
               className="input input-bordered w-full"
@@ -42,6 +46,7 @@ const UserLogin = () => {
               Correo electrónico
             </label>
             <input
+              label="email"
               type="email"
               id="email"
               name="email"
@@ -51,7 +56,8 @@ const UserLogin = () => {
               Contraseña
             </label>
             <input
-              type="text"
+              label="password"
+              type="password"
               id="password"
               name="password"
               className="input input-bordered w-full"
