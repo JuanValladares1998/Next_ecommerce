@@ -10,25 +10,23 @@ const UserLogin = () => {
   const login = async (e) => {
     e.preventDefault();
 
-    try {
-      const response = await fetch("/api/register", {
-        method: "POST",
-        body: JSON.stringify({
-          name: e.target.username.value,
-          email: e.target.email.value,
-          password: e.target.password.value,
-        }),
-      });
-      if (response.ok) {
-        router.push("/auth/login");
-      }
-    } catch {}
+    const response = await fetch("/api/register", {
+      method: "POST",
+      body: JSON.stringify({
+        name: e.target.username.value,
+        email: e.target.email.value,
+        password: e.target.password.value,
+      }),
+    });
+    if (response.ok) {
+      router.push("/auth/login");
+    }
   };
 
   return (
     <section className="flex min-h-screen flex-col items-center">
       <form onSubmit={login}>
-        <div className="card w-[30rem] bg-base-100 shadow-md mx-auto mt-20">
+        <div className="card w-[30rem] bg-base-100 shadow-md mx-auto mt-[30%]">
           <div className="card-body">
             <h1 className="card-title">Logearse</h1>
             <p className="text-left">Ingresa tus datos para iniciar seción</p>

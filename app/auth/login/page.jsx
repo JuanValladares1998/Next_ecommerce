@@ -17,13 +17,12 @@ const UserLogin = () => {
       redirect: true,
       callbackUrl: "/",
     });
-    console.log(result);
   };
 
   return (
     <section className="flex min-h-screen flex-col items-center">
       <form onSubmit={login}>
-        <div className="card w-[30rem] bg-base-100 shadow-md mx-auto mt-20">
+        <div className="card w-[30rem] bg-base-100 shadow-md mx-auto mt-[40%]">
           <div className="card-body">
             <h1 className="card-title">Logearse</h1>
             <p className="text-left">Ingresa tus datos para iniciar seción</p>
