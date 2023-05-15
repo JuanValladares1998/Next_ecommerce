@@ -1,12 +1,26 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import transporter from "@/utils/nodemailer";
+import User from "@/models/user";
+import { connectToDB } from "@/utils/database";
+import regEmail from "@/models/regEmails";
 
-export const POST = async (req) => {
+export const POST = async (req, res) => {
   const { name, email, password } = await req.json();
+  connectToDB();
+  const findUser = await User.findOne({ email: email });
+  const registerEmail = await regEmail.findOne({ email: email });
+  if (registerEmail)
+    return new Response("El correo ya está registrado", { status: 500 });
+
+  await regEmail.create({ email });
+
+  if (findUser)
+    return new Response("El correo ya está registrado", { status: 500 });
+
   const hashedPassword = await bcrypt.hash(password, 10);
 
-  const accessToken = jwt.sign(
+  const accessToken = await jwt.sign(
     {
       name: name,
       email: email,
@@ -22,7 +36,7 @@ export const POST = async (req) => {
     subject: "Confirma tu cuenta",
     html: `<a href="http://localhost:3000/auth/activate-account?token=${accessToken}">click aquí</a>`,
   });
-  
+
   console.log("Correo de confirmacion enviado a: " + email);
   return new Response("Correo enviado", { status: 200 });
 };

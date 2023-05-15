@@ -1,17 +1,13 @@
 "use client";
 
-import { signIn, useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { signIn } from "next-auth/react";
+import Link from "next/link";
 
 const UserLogin = () => {
-  const router = useRouter();
-  const { data: session } = useSession();
-
   const login = async (e) => {
     e.preventDefault();
 
-    const result = await signIn("credentials", {
+    await signIn("credentials", {
       email: e.target.email.value,
       password: e.target.password.value,
       redirect: true,
@@ -49,6 +45,12 @@ const UserLogin = () => {
             <button type="submit" className="btn btn-primary mt-4">
               Ingresar
             </button>
+            <p className="text-center mt-4">
+              ¿Olviaste tu contraseña?{" "}
+              <Link href={"/auth/reset-password"} className="link">
+                Cambiar constraseña
+              </Link>
+            </p>
           </div>
         </div>
       </form>

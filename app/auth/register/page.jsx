@@ -1,31 +1,32 @@
 "use client";
 
-import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 
 const UserLogin = () => {
   const router = useRouter();
 
-  const login = async (e) => {
+  const register = async (e) => {
     e.preventDefault();
 
-    const response = await fetch("/api/register", {
+    await fetch("/api/register", {
       method: "POST",
       body: JSON.stringify({
         name: e.target.username.value,
         email: e.target.email.value,
         password: e.target.password.value,
       }),
-    });
-    if (response.ok) {
+    }).then(() => {
       router.push("/auth/login");
-    }
+    });
+
+    // if (response.ok) {
+    //   router.push("/auth/login");
+    // }
   };
 
   return (
     <section className="flex min-h-screen flex-col items-center">
-      <form onSubmit={login}>
+      <form onSubmit={register}>
         <div className="card w-[30rem] bg-base-100 shadow-md mx-auto mt-[30%]">
           <div className="card-body">
             <h1 className="card-title">Logearse</h1>
