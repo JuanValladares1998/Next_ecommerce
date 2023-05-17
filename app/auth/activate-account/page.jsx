@@ -1,6 +1,7 @@
 "use client";
 
 import ErrorAlert from "@/components/ErrorAlert";
+import SubmitButton from "@/components/SubmitButton";
 import SuccessAlert from "@/components/SuccessAlert";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
@@ -11,9 +12,11 @@ const ActivateAccount = () => {
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
   const [alert, setAlert] = useState("");
+  const [status, setStatus] = useState("none");
 
   const confirmAccount = async (e) => {
     e.preventDefault();
+    setStatus("loading");
     setAlert("");
 
     const res = await fetch(`/api/activate-account/${token}`, {
@@ -22,8 +25,10 @@ const ActivateAccount = () => {
     const message = await res.text();
     setAlert({ status: res.status, message: message });
     if (res.status === 500) {
+      setStatus("none");
       return;
     } else {
+      setStatus("success");
       setTimeout(() => {
         router.push("/auth/login");
       }, 2000);
@@ -49,9 +54,7 @@ const ActivateAccount = () => {
               </p>
               {alert.status === 500 && <ErrorAlert text={alert.message} />}
               {alert.status === 200 && <SuccessAlert text={alert.message} />}
-              <button type="submit" className="btn btn-primary mt-4">
-                Activar cuenta
-              </button>
+              <SubmitButton status={status}>Activar Cuenta</SubmitButton>
             </div>
           </div>
         </form>

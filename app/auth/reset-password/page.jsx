@@ -1,16 +1,18 @@
 "use client";
 
 import ErrorAlert from "@/components/ErrorAlert";
+import SubmitButton from "@/components/SubmitButton";
 import SuccessAlert from "@/components/SuccessAlert";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 const ResetPassword = () => {
-  const router = useRouter();
   const [alert, setAlert] = useState("");
+  const [status, setStatus] = useState("none");
 
   const resetPassword = async (e) => {
     e.preventDefault();
+    setStatus("loading");
     setAlert("");
 
     const res = await fetch("/api/reset-password", {
@@ -21,8 +23,10 @@ const ResetPassword = () => {
     });
     setAlert({ status: res.status, message: await res.text() });
     if (res.status === 500) {
+      setStatus("none");
       return;
     }
+    setStatus("success");
   };
 
   return (
@@ -47,9 +51,8 @@ const ResetPassword = () => {
             />
             {alert.status === 500 && <ErrorAlert text={alert.message} />}
             {alert.status === 200 && <SuccessAlert text={alert.message} />}
-            <button type="submit" className="btn btn-primary mt-4">
-              Enivar
-            </button>
+            <SubmitButton status={status}>Enviar</SubmitButton>
+
           </div>
         </div>
       </form>

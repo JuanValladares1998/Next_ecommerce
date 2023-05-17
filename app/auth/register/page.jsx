@@ -1,6 +1,7 @@
 "use client";
 
 import ErrorAlert from "@/components/ErrorAlert";
+import SubmitButton from "@/components/SubmitButton";
 import SuccessAlert from "@/components/SuccessAlert";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -8,9 +9,11 @@ import { useState } from "react";
 const UserLogin = () => {
   const router = useRouter();
   const [alert, setAlert] = useState("");
+  const [status, setStatus] = useState("none");
 
   const register = async (e) => {
     e.preventDefault();
+    setStatus("loading");
     setAlert("");
 
     const res = await fetch("/api/register", {
@@ -23,8 +26,10 @@ const UserLogin = () => {
     });
     setAlert({ status: res.status, message: await res.text() });
     if (res.status === 500) {
+      setStatus("none");
       return;
     } else {
+      setStatus("success");
       setTimeout(() => {
         router.push("/auth/login");
       }, 2000);
@@ -70,9 +75,7 @@ const UserLogin = () => {
             />
             {alert.status === 500 && <ErrorAlert text={alert.message} />}
             {alert.status === 200 && <SuccessAlert text={alert.message} />}
-            <button type="submit" className="btn btn-primary mt-4">
-              Ingresar
-            </button>
+            <SubmitButton status={status}>Enviar</SubmitButton>
           </div>
         </div>
       </form>

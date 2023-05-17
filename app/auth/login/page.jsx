@@ -1,6 +1,7 @@
 "use client";
 
 import ErrorAlert from "@/components/ErrorAlert";
+import SubmitButton from "@/components/SubmitButton";
 import SuccessAlert from "@/components/SuccessAlert";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
@@ -10,10 +11,13 @@ import { useState } from "react";
 const UserLogin = () => {
   const router = useRouter();
   const [alert, setAlert] = useState("");
+  const [status, setStatus] = useState("none");
 
   const login = async (e) => {
     e.preventDefault();
+    setStatus("loading");
     setAlert("");
+
     const res = await signIn("credentials", {
       email: e.target.email.value,
       password: e.target.password.value,
@@ -22,12 +26,14 @@ const UserLogin = () => {
 
     if (res.error) {
       setAlert({ message: res.error, status: 500 });
+      setStatus("none");
       return;
     } else {
+      setStatus("success");
       setAlert({ message: "Logeado correctamente", status: 200 });
       setTimeout(() => {
         router.push("/");
-      }, 2000);
+      }, 1000);
     }
   };
 
@@ -60,9 +66,7 @@ const UserLogin = () => {
             />
             {alert.status === 500 && <ErrorAlert text={alert.message} />}
             {alert.status === 200 && <SuccessAlert text={alert.message} />}
-            <button type="submit" className="btn btn-primary mt-4">
-              Ingresar
-            </button>
+            <SubmitButton status={status}>Ingresar</SubmitButton>
             <p className="text-center mt-4">
               ¿Olviaste tu contraseña?{" "}
               <Link href={"/auth/reset-password"} className="link">
