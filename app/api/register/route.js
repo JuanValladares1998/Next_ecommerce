@@ -4,6 +4,7 @@ import transporter from "@/utils/nodemailer";
 import User from "@/models/user";
 import { connectToDB } from "@/utils/database";
 import regEmail from "@/models/regEmails";
+import activeToken from "@/models/activeTokens";
 
 export const POST = async (req, res) => {
   const { name, email, password } = await req.json();
@@ -29,6 +30,7 @@ export const POST = async (req, res) => {
     process.env.SECRET_KEY,
     { expiresIn: "20min" }
   );
+  await activeToken.create({ token: accessToken });
 
   await transporter.sendMail({
     from: `"Confirmación de Cuenta" <${process.env.USER_EMAIL}>`,

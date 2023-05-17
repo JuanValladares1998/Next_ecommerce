@@ -1,10 +1,17 @@
 "use client";
 
+import ErrorAlert from "@/components/ErrorAlert";
+import SuccessAlert from "@/components/SuccessAlert";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+
 const ResetPassword = () => {
-  // const router = useRouter();
+  const router = useRouter();
+  const [alert, setAlert] = useState("");
 
   const resetPassword = async (e) => {
     e.preventDefault();
+    setAlert("");
 
     const res = await fetch("/api/reset-password", {
       method: "POST",
@@ -12,7 +19,10 @@ const ResetPassword = () => {
         email: e.target.email.value,
       }),
     });
-    console.log(res);
+    setAlert({ status: res.status, message: await res.text() });
+    if (res.status === 500) {
+      return;
+    }
   };
 
   return (
@@ -35,8 +45,10 @@ const ResetPassword = () => {
               name="email"
               className="input input-bordered w-full"
             />
+            {alert.status === 500 && <ErrorAlert text={alert.message} />}
+            {alert.status === 200 && <SuccessAlert text={alert.message} />}
             <button type="submit" className="btn btn-primary mt-4">
-              Ingresar
+              Enivar
             </button>
           </div>
         </div>

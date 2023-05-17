@@ -1,18 +1,34 @@
 "use client";
 
+import ErrorAlert from "@/components/ErrorAlert";
+import SuccessAlert from "@/components/SuccessAlert";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 const UserLogin = () => {
+  const router = useRouter();
+  const [alert, setAlert] = useState("");
+
   const login = async (e) => {
     e.preventDefault();
-
-    await signIn("credentials", {
+    setAlert("");
+    const res = await signIn("credentials", {
       email: e.target.email.value,
       password: e.target.password.value,
-      redirect: true,
-      callbackUrl: "/",
+      redirect: false,
     });
+
+    if (res.error) {
+      setAlert({ message: res.error, status: 500 });
+      return;
+    } else {
+      setAlert({ message: "Logeado correctamente", status: 200 });
+      setTimeout(() => {
+        router.push("/");
+      }, 2000);
+    }
   };
 
   return (
@@ -42,6 +58,8 @@ const UserLogin = () => {
               name="password"
               className="input input-bordered w-full"
             />
+            {alert.status === 500 && <ErrorAlert text={alert.message} />}
+            {alert.status === 200 && <SuccessAlert text={alert.message} />}
             <button type="submit" className="btn btn-primary mt-4">
               Ingresar
             </button>

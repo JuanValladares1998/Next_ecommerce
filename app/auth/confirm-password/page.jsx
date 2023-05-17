@@ -1,23 +1,37 @@
 "use client";
 
+import ErrorAlert from "@/components/ErrorAlert";
+import SuccessAlert from "@/components/SuccessAlert";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useState } from "react";
 
 const ConfirmPassword = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
+  const [alert, setAlert] = useState("");
 
   const confirmPassword = async (e) => {
     e.preventDefault();
+    setAlert("");
 
-    await fetch(`/api/confirm-password/${token}`, {
+    const res = await fetch(`/api/confirm-password/${token}`, {
       method: "POST",
       body: JSON.stringify({
         password: e.target.password.value,
       }),
-    }).then(() => {
-      router.push("/auth/login");
     });
+    const message = await res.text();
+    console.log(message);
+    console.log(res);
+    setAlert({ status: res.status, message: message });
+    if (res.status === 500) {
+      return;
+    } else {
+      setTimeout(() => {
+        router.push("/auth/login");
+      }, 2000);
+    }
   };
 
   return (
@@ -39,6 +53,8 @@ const ConfirmPassword = () => {
               name="password"
               className="input input-bordered w-full"
             />
+            {alert.status === 500 && <ErrorAlert text={alert.message} />}
+            {alert.status === 200 && <SuccessAlert text={alert.message} />}
             <button type="submit" className="btn btn-primary mt-4">
               Enviar
             </button>

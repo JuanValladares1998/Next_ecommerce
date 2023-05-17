@@ -1,27 +1,34 @@
 "use client";
 
+import ErrorAlert from "@/components/ErrorAlert";
+import SuccessAlert from "@/components/SuccessAlert";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 const UserLogin = () => {
   const router = useRouter();
+  const [alert, setAlert] = useState("");
 
   const register = async (e) => {
     e.preventDefault();
+    setAlert("");
 
-    await fetch("/api/register", {
+    const res = await fetch("/api/register", {
       method: "POST",
       body: JSON.stringify({
         name: e.target.username.value,
         email: e.target.email.value,
         password: e.target.password.value,
       }),
-    }).then(() => {
-      router.push("/auth/login");
     });
-
-    // if (response.ok) {
-    //   router.push("/auth/login");
-    // }
+    setAlert({ status: res.status, message: await res.text() });
+    if (res.status === 500) {
+      return;
+    } else {
+      setTimeout(() => {
+        router.push("/auth/login");
+      }, 2000);
+    }
   };
 
   return (
@@ -61,6 +68,8 @@ const UserLogin = () => {
               name="password"
               className="input input-bordered w-full"
             />
+            {alert.status === 500 && <ErrorAlert text={alert.message} />}
+            {alert.status === 200 && <SuccessAlert text={alert.message} />}
             <button type="submit" className="btn btn-primary mt-4">
               Ingresar
             </button>

@@ -1,21 +1,33 @@
 "use client";
 
+import ErrorAlert from "@/components/ErrorAlert";
+import SuccessAlert from "@/components/SuccessAlert";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 const ActivateAccount = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
+  const [alert, setAlert] = useState("");
 
   const confirmAccount = async (e) => {
     e.preventDefault();
-    await fetch(`/api/activate-account/${token}`, {
+    setAlert("");
+
+    const res = await fetch(`/api/activate-account/${token}`, {
       method: "POST",
     });
-
-    router.push("/auth/login");
+    const message = await res.text();
+    setAlert({ status: res.status, message: message });
+    if (res.status === 500) {
+      return;
+    } else {
+      setTimeout(() => {
+        router.push("/auth/login");
+      }, 2000);
+    }
   };
 
   useEffect(() => {
@@ -35,7 +47,8 @@ const ActivateAccount = () => {
                 Da click en el siguiente botón para terminar con la activación
                 de tu cuenta.
               </p>
-
+              {alert.status === 500 && <ErrorAlert text={alert.message} />}
+              {alert.status === 200 && <SuccessAlert text={alert.message} />}
               <button type="submit" className="btn btn-primary mt-4">
                 Activar cuenta
               </button>
