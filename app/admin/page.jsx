@@ -20,6 +20,9 @@ const Admin = () => {
   return (
     <section className="w-full flex-center flex-col">
       <h1 className="head_text text-center">Admin</h1>
+      {users.map((user) => (
+        <div>{user.name}</div>
+      ))}
     </section>
   );
 };
