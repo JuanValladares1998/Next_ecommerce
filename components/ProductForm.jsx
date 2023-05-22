@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-// import { deleteFile, uploadFile } from "@/utils/firebase";
+import { deleteFile, uploadFile } from "@/utils/firebase";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
@@ -39,22 +39,25 @@ const ProductForm = ({
         body: JSON.stringify({ data }),
       });
     }
-    console.log(success);
     if (success?.status === 200) {
       router.push("/admin/products");
     }
   }
 
-  // async function uploadImage(ev) {
-  //   try {
-  //     setUploading(true);
-  //     const url = await uploadFile(ev.target.files[0]);
-  //     setUploading(false);
-  //     setImages((img) => [...img, url]);
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // }
+  async function uploadImage(ev) {
+    try {
+      setUploading(true);
+      const url = await uploadFile(ev.target.files[0]);
+      setUploading(false);
+      if (images) {
+        setImages((img) => [...img, url]);
+      } else {
+        setImages(() => [url]);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   function setFirstImage(img) {
     const fotosSinMarcar = images.filter((photo) => photo !== img);
@@ -62,30 +65,39 @@ const ProductForm = ({
     setImages(nuevoOrden);
   }
 
-  // async function deleteImage(url) {
-  //   const success = await deleteFile(url);
-  //   if (!success) return;
-  //   const array = images.filter((photo) => photo !== url);
-  //   setImages(array);
-  // }
+  async function deleteImage(url) {
+    const success = await deleteFile(url);
+    if (!success) return;
+    const array = images.filter((photo) => photo !== url);
+    setImages(array);
+  }
 
-  function fetchCategories() {
-    // axios.get("/api/categories").then((result) => {
-    //   setCategories(result.data);
-    // });
-    // axios.get("/api/subcategories").then((result) => {
-    //   setSubCategories(result.data);
-    // });
+  async function fetchCategories() {
+    let data;
+    try {
+      const response = await fetch("/api/categories");
+      data = await response.json();
+      setCategories(data);
+    } catch (err) {
+      console.log(err);
+    }
+    try {
+      const response = await fetch("/api/subcategories");
+      data = await response.json();
+      setSubCategories(data);
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   useEffect(() => {
-    // fetchCategories();
+    fetchCategories();
     setTitle(existingTitle);
     setDescription(existingDescription);
-    setCategories(existingCategory);
-    setSubCategories(existingSubCategory);
     setPrice(existingPrice);
     setImages(existingImages);
+    setCategory(existingCategory);
+    setSubCategory(existingSubCategory);
   }, [
     existingTitle,
     existingDescription,
@@ -247,7 +259,7 @@ const ProductForm = ({
           onChange={(ev) => setPrice(ev.target.value)}
         />
       </fieldset>
-      {/* <fieldset>
+      <fieldset>
         <label>Categoría</label>
         <div className="flex gap-2">
           <select
@@ -282,7 +294,7 @@ const ProductForm = ({
                 ))}
           </select>
         </div>
-      </fieldset> */}
+      </fieldset>
       <button className="btn btn-primary" type="submit">
         Guardar
       </button>

@@ -224,7 +224,7 @@ const page = () => {
             ) : (
               <tr>
                 <td>
-                  <label>Loading...</label>
+                  <label>No hay Categorias</label>
                 </td>
               </tr>
             )}
@@ -360,7 +360,7 @@ const page = () => {
             ) : (
               <tr>
                 <td>
-                  <label>Loading...</label>
+                  <label>No hay Subcategorias</label>
                 </td>
               </tr>
             )}

@@ -5,4 +5,5 @@ const SubCateogrySchema = new Schema({
   parent: { type: mongoose.Types.ObjectId, ref: "Category", required: false },
 });
 
-export const SubCategory = models?.SubCategory || model("SubCategory", SubCateogrySchema);
+export const SubCategory =
+  models?.SubCategory || model("SubCategory", SubCateogrySchema);
