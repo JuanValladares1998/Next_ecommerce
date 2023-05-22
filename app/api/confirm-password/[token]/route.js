@@ -32,6 +32,6 @@ export const POST = async (req, { params }) => {
       return new Response("Contraseña actualizada", { status: 200 });
     });
   } catch (err) {
-    return new Response("Error en el servidor", { status: 500 });
+    return new Response({ status: 500 });
   }
 };

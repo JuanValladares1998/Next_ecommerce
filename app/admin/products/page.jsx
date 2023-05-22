@@ -8,10 +8,13 @@ const page = () => {
 
   const getProducts = async () => {
     try {
+      console.log("data");
       const response = await fetch("/api/products");
       const data = await response.json();
       setProducts(data);
-    } catch (err) {}
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const deleteProduct = async () => {
