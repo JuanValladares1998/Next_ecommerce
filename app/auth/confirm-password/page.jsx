@@ -25,8 +25,7 @@ const ConfirmPassword = () => {
       }),
     });
     const message = await res.text();
-    console.log(message);
-    console.log(res);
+
     setAlert({ status: res.status, message: message });
     if (res.status === 500) {
       setStatus("none");

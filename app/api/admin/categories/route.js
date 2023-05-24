@@ -6,9 +6,9 @@ export const POST = async (req) => {
     const { name } = await req.json();
     connectToDB();
     await Category.create({ name });
-    return new Response({ status: 200 });
+    return new Response("Categoría creada correctamente", { status: 200 });
   } catch (error) {
-    return new Response({ status: 500 });
+    return new Response("Error al crear categoria", { status: 500 });
   }
 };
 
@@ -22,8 +22,8 @@ export const PUT = async (req) => {
       },
       { name }
     );
-    return new Response({ status: 200 });
+    return new Response("Categoría actualizada correctamente", { status: 200 });
   } catch (error) {
-    return new Response({ status: 500 });
+    return new Response("Error al actualizar categoria", { status: 500 });
   }
 };

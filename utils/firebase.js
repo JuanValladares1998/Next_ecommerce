@@ -27,13 +27,15 @@ export async function uploadFile(file) {
   if (
     file.type === "image/jpeg" ||
     file.type === "image/png" ||
-    file.type === "image/jpg"
+    file.type === "image/jpg" ||
+    file.type === "image/avif"
   ) {
     const storageRef = ref(storage, uuidv4());
     await uploadBytes(storageRef, file);
     const url = await getDownloadURL(storageRef);
     return url;
   }
+  return false;
 }
 
 export async function deleteFile(direction) {

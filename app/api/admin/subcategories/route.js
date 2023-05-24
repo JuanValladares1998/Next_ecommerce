@@ -6,9 +6,9 @@ export const POST = async (req) => {
     const { subname: name, parent } = await req.json();
     connectToDB();
     await SubCategory.create({ name, parent });
-    return new Response({ status: 200 });
+    return new Response("Subcategoría creada correctamente", { status: 200 });
   } catch (error) {
-    return new Response({ status: 500 });
+    return new Response("Error al crear subcategoria", { status: 500 });
   }
 };
 
@@ -19,8 +19,8 @@ export const PUT = async (req) => {
     connectToDB();
 
     await SubCategory.updateOne({ _id }, { name, parent });
-    return new Response({ status: 200 });
+    return new Response("Subategoría actualizada correctamente", { status: 200 });
   } catch (error) {
-    return new Response({ status: 500 });
+    return new Response("Error al actualizar subcategoria", { status: 500 });
   }
 };

@@ -1,4 +1,6 @@
 "use client";
+import ErrorAlert from "@/components/ErrorAlert";
+import SuccessAlert from "@/components/SuccessAlert";
 import { useEffect, useRef, useState } from "react";
 
 const page = () => {
@@ -11,6 +13,8 @@ const page = () => {
   const [editedSubCategory, setEditedSubCategory] = useState("");
   const [deleteCategory, setDeleteCategory] = useState("");
   const [deleteSubCategory, setDeleteSubCategory] = useState("");
+  const [alert1, setAlert1] = useState("");
+  const [alert2, setAlert2] = useState("");
   const input1 = useRef(null);
   const input2 = useRef(null);
 
@@ -19,10 +23,11 @@ const page = () => {
   async function saveCategory(ev) {
     ev.preventDefault();
     const data = { name };
+    let res;
     if (editedCategory) {
       data._id = editedCategory._id;
       try {
-        await fetch("/api/admin/categories", {
+        res = await fetch("/api/admin/categories", {
           method: "PUT",
           body: JSON.stringify(data),
         });
@@ -32,7 +37,7 @@ const page = () => {
       setEditedCategory("");
     } else {
       try {
-        await fetch("/api/admin/categories", {
+        res = await fetch("/api/admin/categories", {
           method: "POST",
           body: JSON.stringify(data),
         });
@@ -42,6 +47,10 @@ const page = () => {
     }
     setName("");
     setParent(0);
+    setAlert1({ status: res.status, message: await res.text() });
+    setTimeout(() => {
+      setAlert1("");
+    }, 6000);
 
     await fetchCategories();
   }
@@ -49,11 +58,11 @@ const page = () => {
   async function saveSubCategory(ev) {
     ev.preventDefault();
     const data = { subname, parent };
-    console.log(data);
+    let res;
     if (editedSubCategory) {
       data._id = editedSubCategory._id;
       try {
-        await fetch("/api/admin/subcategories", {
+        res = await fetch("/api/admin/subcategories", {
           method: "PUT",
           body: JSON.stringify(data),
         });
@@ -63,7 +72,7 @@ const page = () => {
       setEditedSubCategory("");
     } else {
       try {
-        await fetch("/api/admin/subcategories", {
+        res = await fetch("/api/admin/subcategories", {
           method: "POST",
           body: JSON.stringify(data),
         });
@@ -73,6 +82,10 @@ const page = () => {
     }
     setSubName("");
     setParent(0);
+    setAlert2({ status: res.status, message: await res.text() });
+    setTimeout(() => {
+      setAlert2("");
+    }, 6000);
     await fetchCategories();
   }
 
@@ -111,10 +124,14 @@ const page = () => {
 
   const dltCategory = async () => {
     try {
-      await fetch(`/api/admin/categories/${deleteCategory._id}`, {
+      const res = await fetch(`/api/admin/categories/${deleteCategory._id}`, {
         method: "DELETE",
       });
       setDeleteCategory("");
+      setAlert1({ status: res.status, message: await res.text() });
+      setTimeout(() => {
+        setAlert1("");
+      }, 6000);
       fetchCategories();
     } catch (err) {
       console.log(err);
@@ -123,10 +140,17 @@ const page = () => {
 
   const dltSubCategory = async () => {
     try {
-      await fetch(`/api/admin/subcategories/${deleteSubCategory._id}`, {
-        method: "DELETE",
-      });
+      const res = await fetch(
+        `/api/admin/subcategories/${deleteSubCategory._id}`,
+        {
+          method: "DELETE",
+        }
+      );
       setDeleteSubCategory("");
+      setAlert2({ status: res.status, message: await res.text() });
+      setTimeout(() => {
+        setAlert2("");
+      }, 6000);
       fetchCategories();
     } catch (err) {
       console.log(err);
@@ -175,61 +199,67 @@ const page = () => {
             )}
           </div>
         </form>
-        <table className="table w-full mt-4">
-          <thead>
-            <tr>
-              <td>Nombre de la categoría</td>
-              <td>Acciones</td>
-            </tr>
-          </thead>
-          <tbody>
-            {categories.length > 0 ? (
-              <>
-                {categories.map((category) => (
-                  <tr key={category._id}>
-                    <td>{category.name}</td>
-
-                    <td>
-                      <button
-                        className="btn btn-primary mr-10"
-                        onClick={() => editCategory(category)}
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          strokeWidth={1.5}
-                          stroke="currentColor"
-                          className="w-5 h-5 inline mr-2"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"
-                          />
-                        </svg>
-                        Editar
-                      </button>
-                      <label
-                        htmlFor="my-modal"
-                        className="btn"
-                        onClick={() => setDeleteCategory(category)}
-                      >
-                        Eliminar
-                      </label>
-                    </td>
-                  </tr>
-                ))}
-              </>
-            ) : (
+        <div className="my-4">
+          {alert1.status === 500 && <ErrorAlert text={alert1.message} />}
+          {alert1.status === 200 && <SuccessAlert text={alert1.message} />}
+        </div>
+        <div className="min-h-[22rem] h-[22rem] overflow-auto w-full">
+          <table className="table w-full mt-4">
+            <thead>
               <tr>
-                <td>
-                  <label>No hay Categorias</label>
-                </td>
+                <td>Nombre de la categoría</td>
+                <td>Acciones</td>
               </tr>
-            )}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {categories.length > 0 ? (
+                <>
+                  {categories.map((category) => (
+                    <tr key={category._id}>
+                      <td>{category.name}</td>
+
+                      <td>
+                        <button
+                          className="btn btn-primary mr-10"
+                          onClick={() => editCategory(category)}
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth={1.5}
+                            stroke="currentColor"
+                            className="w-5 h-5 inline mr-2"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"
+                            />
+                          </svg>
+                          Editar
+                        </button>
+                        <label
+                          htmlFor="my-modal"
+                          className="btn"
+                          onClick={() => setDeleteCategory(category)}
+                        >
+                          Eliminar
+                        </label>
+                      </td>
+                    </tr>
+                  ))}
+                </>
+              ) : (
+                <tr>
+                  <td>
+                    <label>No hay Categorias</label>
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
         <div>
           <input type="checkbox" id="my-modal" className="modal-toggle" />
           <div className="modal">
@@ -310,62 +340,68 @@ const page = () => {
             )}
           </div>
         </form>
-        <table className="table w-full mt-4">
-          <thead>
-            <tr>
-              <td>Nombre de la categoría</td>
-              <td>Categoría padre</td>
-              <td>Acciones</td>
-            </tr>
-          </thead>
-          <tbody>
-            {categories.length > 0 ? (
-              <>
-                {subcategories.map((category) => (
-                  <tr key={category._id}>
-                    <td>{category.name}</td>
-                    <td>{category?.parent?.name}</td>
-                    <td>
-                      <button
-                        className="btn btn-primary mr-10"
-                        onClick={() => editSubCategory(category)}
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          strokeWidth={1.5}
-                          stroke="currentColor"
-                          className="w-5 h-5 inline mr-2"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"
-                          />
-                        </svg>
-                        Editar
-                      </button>
-                      <label
-                        htmlFor="my-modal2"
-                        className="btn"
-                        onClick={() => setDeleteSubCategory(category)}
-                      >
-                        Eliminar
-                      </label>
-                    </td>
-                  </tr>
-                ))}
-              </>
-            ) : (
+        <div className="my-4">
+          {alert2.status === 500 && <ErrorAlert text={alert2.message} />}
+          {alert2.status === 200 && <SuccessAlert text={alert2.message} />}
+        </div>
+        <div className="min-h-[22rem] h-[22rem] overflow-auto w-full">
+          <table className="table relative w-full mt-4">
+            <thead>
               <tr>
-                <td>
-                  <label>No hay Subcategorias</label>
-                </td>
+                <td>Nombre de la categoría</td>
+                <td>Categoría padre</td>
+                <td>Acciones</td>
               </tr>
-            )}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {categories.length > 0 ? (
+                <>
+                  {subcategories.map((category) => (
+                    <tr key={category._id}>
+                      <td>{category.name}</td>
+                      <td>{category?.parent?.name}</td>
+                      <td>
+                        <button
+                          className="btn btn-primary mr-10"
+                          onClick={() => editSubCategory(category)}
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth={1.5}
+                            stroke="currentColor"
+                            className="w-5 h-5 inline mr-2"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"
+                            />
+                          </svg>
+                          Editar
+                        </button>
+                        <label
+                          htmlFor="my-modal2"
+                          className="btn"
+                          onClick={() => setDeleteSubCategory(category)}
+                        >
+                          Eliminar
+                        </label>
+                      </td>
+                    </tr>
+                  ))}
+                </>
+              ) : (
+                <tr>
+                  <td>
+                    <label>No hay Subcategorias</label>
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
         <div>
           <input type="checkbox" id="my-modal2" className="modal-toggle" />
           <div className="modal">

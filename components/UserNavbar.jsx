@@ -7,7 +7,7 @@ const UserNavbar = () => {
 
   return (
     <aside className="text-white p-4 ">
-      <Link href={"/ "} className="flex gap-1 mb-4 mr-4">
+      <Link href={"/"} className="flex gap-1 mb-4 mr-4">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -25,7 +25,7 @@ const UserNavbar = () => {
         <span className="text-xl">Ecommece Admin</span>
       </Link>
       <nav className="flex flex-col gap-2">
-        <Link href={"/"} className={buttonStyle}>
+        <Link href={"/admin"} className={buttonStyle}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"

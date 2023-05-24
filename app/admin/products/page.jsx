@@ -1,14 +1,16 @@
 "use client";
+import ErrorAlert from "@/components/ErrorAlert";
+import SuccessAlert from "@/components/SuccessAlert";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
 const page = () => {
   const [products, setProducts] = useState([]);
   const [dltProduct, setDltProduct] = useState([]);
+  const [alert, setAlert] = useState("");
 
   const getProducts = async () => {
     try {
-      console.log("data");
       const response = await fetch("/api/products");
       const data = await response.json();
       setProducts(data);
@@ -19,9 +21,13 @@ const page = () => {
 
   const deleteProduct = async () => {
     try {
-      await fetch(`/api/admin/products/${dltProduct._id}`, {
+      const res = await fetch(`/api/admin/products/${dltProduct._id}`, {
         method: "DELETE",
       });
+      setAlert({ status: res.status, message: await res.text() });
+      setTimeout(() => {
+        setAlert("");
+      }, 6000);
       getProducts();
     } catch (err) {}
   };
@@ -35,6 +41,10 @@ const page = () => {
       <Link className="btn btn-success" href={"/admin/products/new"}>
         Agregar nuevo producto
       </Link>
+      <div className="mt-4">
+        {alert.status === 500 && <ErrorAlert text={alert.message} />}
+        {alert.status === 200 && <SuccessAlert text={alert.message} />}
+      </div>
       <table className="table w-full mt-4">
         <thead>
           <tr>

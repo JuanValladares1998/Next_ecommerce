@@ -4,12 +4,12 @@ const SubmitButton = ({ status = "none", children }) => {
   return (
     <>
       {status === "none" && (
-        <button type="submit" className="btn btn-primary w-full">
+        <button type="submit" className="btn btn-primary">
           {children}
         </button>
       )}
       {status === "loading" && (
-        <button className="btn btn-primary w-full" disabled>
+        <button className="btn btn-primary" disabled>
           <svg
             viewBox="0 0 24 24"
             fill="none"
@@ -36,7 +36,7 @@ const SubmitButton = ({ status = "none", children }) => {
         </button>
       )}
       {status === "success" && (
-        <button className="btn btn-primary w-full" type="button">
+        <button className="btn btn-primary" type="button">
           {children}
         </button>
       )}
