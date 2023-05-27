@@ -1,5 +1,6 @@
 import Footer from "@/components/Footer";
-import ProductCard from "@/components/ProductCard";
+import ProductCard from "@/components/products/ProductCard";
+import Link from "next/link";
 
 const getProducts = async () => {
   try {
@@ -34,9 +35,12 @@ const Home = async () => {
               et a id nisi.
             </p>
             <div className="flex gap-2">
-              <button className="btn btn-secondary btn-xl w-48">
+              <Link
+                href={`/products?id=${products[0]._id}`}
+                className="btn btn-secondary btn-xl w-48"
+              >
                 Ver producto
-              </button>
+              </Link>
               <button className="btn btn-accent btn-xl w-48">Comprar</button>
             </div>
           </div>
@@ -45,8 +49,8 @@ const Home = async () => {
       <section className="max-w-7xl p-4 flex-center w-full mx-auto flex-col">
         <h2 className="mb-6">Nuevos productos</h2>
         <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {products.map((item) => (
-            <ProductCard product={item} />
+          {products.map((product) => (
+            <ProductCard product={product} />
           ))}
         </div>
       </section>

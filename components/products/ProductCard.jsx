@@ -1,4 +1,5 @@
 import { shorterText } from "@/function";
+import Link from "next/link";
 import React from "react";
 
 const ProductCard = ({ product }) => {
@@ -15,7 +16,12 @@ const ProductCard = ({ product }) => {
         <h2 className="card-title">{product.title}</h2>
         <p className="mb-4">{shorterText(product.description)}</p>
         <div className="card-actions justify-start">
-          <button className="btn btn-secondary">Ver producto</button>
+          <Link
+            href={`/products?id=${product._id}`}
+            className="btn btn-secondary"
+          >
+            Ver producto
+          </Link>
           <button className="btn btn-primary">
             Agregar al
             <svg
