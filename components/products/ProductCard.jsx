@@ -1,8 +1,24 @@
+"use client";
+import { CartState } from "@/context/CartContext";
 import { shorterText } from "@/function";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 const ProductCard = ({ product }) => {
+  const [inCart, setInCart] = useState(false);
+
+  const {
+    cartDispatch,
+    cartState: { cart },
+  } = CartState();
+
+  useEffect(() => {
+    const contain = cart.findIndex((item) => {
+      return item._id == product._id;
+    });
+    console.log(contain);
+    contain > -1 ? setInCart(true) : setInCart(false);
+  }, [cart]);
   return (
     <div className="card w-full bg-base-100 shadow-md">
       <figure>
@@ -18,12 +34,25 @@ const ProductCard = ({ product }) => {
         <div className="card-actions justify-start">
           <Link
             href={`/products?id=${product._id}`}
-            className="btn btn-secondary"
+            className="btn btn-outline btn-primary"
           >
             Ver producto
           </Link>
-          <button className="btn btn-primary">
-            Agregar al
+          <button
+            className={`btn ${!inCart ? "btn-primary" : "btn-ghost"}`}
+            onClick={() => {
+              !inCart
+                ? cartDispatch({
+                    type: "ADD_TO_CART",
+                    payload: { ...product },
+                  })
+                : cartDispatch({
+                    type: "REM_FROM_CART",
+                    payload: { ...product },
+                  });
+            }}
+          >
+            {!inCart ? "Agregar al" : "Quitar del"}
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"

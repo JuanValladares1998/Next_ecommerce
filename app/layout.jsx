@@ -1,5 +1,6 @@
 import NavBar from "@/components/NavBar";
 import Provider from "@/components/provider/Provider";
+import { CartProvider } from "@/context/CartContext";
 import "@/styles/globals.css";
 
 export const metadata = {
@@ -11,12 +12,14 @@ const Root = ({ children }) => {
   return (
     <html>
       <body>
-        <Provider>
-          <main>
-            <NavBar />
-            {children}
-          </main>
-        </Provider>
+        <CartProvider>
+          <Provider>
+            <main>
+              <NavBar />
+              {children}
+            </main>
+          </Provider>
+        </CartProvider>
       </body>
     </html>
   );
