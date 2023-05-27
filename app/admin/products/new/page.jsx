@@ -1,4 +1,4 @@
-import ProductForm from "@/components/ProductForm";
+import ProductForm from "@/components/admin/ProductForm";
 import Link from "next/link";
 import React from "react";
 

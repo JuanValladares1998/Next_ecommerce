@@ -14,7 +14,7 @@ const SubmitButton = ({ status = "none", children }) => {
             viewBox="0 0 24 24"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
-            className="animate-spin w-10 h-10 mx-auto"
+            className="animate-spin w-10 h-10 mr-4"
           >
             <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
             <g
@@ -33,6 +33,7 @@ const SubmitButton = ({ status = "none", children }) => {
               ></path>{" "}
             </g>
           </svg>
+          {children}
         </button>
       )}
       {status === "success" && (

@@ -1,6 +1,6 @@
 "use client";
-import ErrorAlert from "@/components/ErrorAlert";
-import SuccessAlert from "@/components/SuccessAlert";
+import ErrorAlert from "@/components/alerts/ErrorAlert";
+import SuccessAlert from "@/components/alerts/SuccessAlert";
 import { useEffect, useRef, useState } from "react";
 
 const page = () => {

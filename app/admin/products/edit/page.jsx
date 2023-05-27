@@ -1,5 +1,5 @@
 "use client";
-import ProductForm from "@/components/ProductForm";
+import ProductForm from "@/components/admin/ProductForm";
 import { useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 

@@ -1,8 +1,8 @@
 "use client";
 
-import ErrorAlert from "@/components/ErrorAlert";
+import ErrorAlert from "@/components/alerts/ErrorAlert";
 import SubmitButton from "@/components/SubmitButton";
-import SuccessAlert from "@/components/SuccessAlert";
+import SuccessAlert from "@/components/alerts/SuccessAlert";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";

@@ -3,9 +3,9 @@ import Link from "next/link";
 import { deleteFile, uploadFile } from "@/utils/firebase";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import ErrorAlert from "./ErrorAlert";
-import SuccessAlert from "./SuccessAlert";
-import SubmitButton from "./SubmitButton";
+import ErrorAlert from "../alerts/ErrorAlert";
+import SuccessAlert from "../alerts/SuccessAlert";
+import SubmitButton from "../SubmitButton";
 
 const ProductForm = ({
   _id,
@@ -45,7 +45,9 @@ const ProductForm = ({
         body: JSON.stringify({ data }),
       });
     }
-    setAlert({ status: res.status, message: await res.text() });
+    const mssg = await res.text();
+    console.log(mssg);
+    setAlert({ status: res.status, message: mssg });
     if (res.status === 500) {
       setStatus("none");
       return;

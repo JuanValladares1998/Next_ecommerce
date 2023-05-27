@@ -37,7 +37,7 @@ export const PUT = async (req) => {
       },
       { title, description, price, images, category, subCategory }
     );
-    return new Response({ status: 200 });
+    return new Response("Actualizado correctamente", { status: 200 });
   } catch (error) {
     return new Response({ status: 500 });
   }

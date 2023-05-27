@@ -8,7 +8,7 @@ const NavBar = () => {
   return (
     <header className="navbar bg-base-100 shadow-md">
       <div className="flex-1">
-        <a className="btn btn-ghost normal-case text-xl">Login de Usuarios</a>
+        <a className="btn btn-ghost normal-case text-xl">Ecommerce</a>
       </div>
       <nav className="flex-none">
         <ul className="menu menu-horizontal px-1 gap-2">
@@ -86,8 +86,8 @@ const NavBar = () => {
                 </Link>
               </li>
               <li>
-                <Link className="btn btn-accent" href={"/auth/register"}>
-                  Register
+                <Link className="btn btn-secondary" href={"/auth/register"}>
+                  Registrarse
                 </Link>
               </li>
             </>
