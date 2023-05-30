@@ -34,7 +34,7 @@ export const POST = async (req) => {
       from: `"Cambio de Contraseña" <${process.env.USER_EMAIL}>`,
       to: email,
       subject: "Cambio de contraseña",
-      html: `<a href="http://localhost:3000/auth/confirm-password?token=${accessToken}">click aquí</a>`,
+      html: `<a href="${process.env.NEXTAUTH_URL}/auth/confirm-password?token=${accessToken}">click aquí</a>`,
     });
 
     console.log("Correo de cambio de contraseña enviado a: " + email);

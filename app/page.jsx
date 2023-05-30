@@ -4,7 +4,7 @@ import Link from "next/link";
 
 const getProducts = async () => {
   try {
-    const response = await fetch("http://localhost:3000/api/products", {
+    const response = await fetch(`${process.env.NEXTAUTH_URL}/api/products`, {
       cache: "no-store",
     });
     const data = await response.json();

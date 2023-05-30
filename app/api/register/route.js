@@ -37,7 +37,7 @@ export const POST = async (req, res) => {
       from: `"Confirmación de Cuenta" <${process.env.USER_EMAIL}>`,
       to: email,
       subject: "Confirma tu cuenta",
-      html: `<a href="http://localhost:3000/auth/activate-account?token=${accessToken}">click aquí</a>`,
+      html: `<a href="${process.env.NEXTAUTH_URL}/auth/activate-account?token=${accessToken}">click aquí</a>`,
     });
 
     console.log("Correo de confirmacion enviado a: " + email);
