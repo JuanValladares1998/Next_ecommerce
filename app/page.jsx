@@ -4,9 +4,13 @@ import Link from "next/link";
 
 const getProducts = async () => {
   try {
-    const response = await fetch(`${process.env.NEXTAUTH_URL}/api/products`, {
-      cache: "no-store",
-    });
+    const response = await fetch(
+      `next-ecommerce-jjvm-n2jw7g3c4-juanvalladares1998.vercel.app
+    /api/products`,
+      {
+        cache: "no-store",
+      }
+    );
     const data = await response.json();
     return data;
   } catch (err) {

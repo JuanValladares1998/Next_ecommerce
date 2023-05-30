@@ -1,4 +1,4 @@
-import NavBar from "@/components/NavBar";
+import NavBar from "@/components/navigation/NavBar";
 import Provider from "@/components/provider/Provider";
 import { CartProvider } from "@/context/CartContext";
 import "@/styles/globals.css";

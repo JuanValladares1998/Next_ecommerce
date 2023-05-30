@@ -1,4 +1,4 @@
-import UserNavbar from "@/components/UserNavbar";
+import UserNavbar from "@/components/navigation/UserNavbar";
 import React from "react";
 
 const layout = ({ children }) => {
